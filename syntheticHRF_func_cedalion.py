@@ -41,7 +41,8 @@ def generateHRF(trange, dt, stimDur, paramsBasis = [0.1000,   3.0000,    1.8000,
     -> nConc = 2 , number of concentrations, HbO+HbR
     -> paramsBasis = parameters for tau and sigma for the modified gamma function for HbO (1:2) and HbR (3:4) (list of 4 floats)
     -> dt = sampling period
-    -> trange = duration of stimulus, (list of two floats ie, [0, 5])
+    -> stimDur = duration of stimulus 
+    -> trange = duration of HRF, (list of two floats ie, [0, 5])
     -> scale = how much to scale each HRF, [HbO, HbR]
     """
 
@@ -68,7 +69,7 @@ def generateHRF(trange, dt, stimDur, paramsBasis = [0.1000,   3.0000,    1.8000,
         if tHRF_gamma[0]<tau:
             gamma[0:int(np.round((tau-tHRF_gamma[0])/dt))] = 0;
             
-        stimulus[:,iConc] = signal.convolve(boxcar, gamma, mode='full')[:nPost_stim]
+        stimulus[:,iConc] = signal.convolve(boxcar, gamma, mode='full') #[:nPost_stim]
         stimulus[:,iConc] = stimulus[:,iConc] / np.max(abs(stimulus[:,iConc])) * scale[iConc] * 1e-6
 
     tHRF_stim = np.arange(nPre*dt, nPost_stim*dt, dt).T
